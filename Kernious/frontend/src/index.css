@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background-color: #f0f0f0;
+  color: #222222;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Links */
+a {
+  color: #3b5998;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Codeforces Signature Flat Panel System */
+.cf-panel {
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  box-shadow: none;
+}
+
+.cf-panel-header {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #3b5998;
+  display: flex;
+  align-items: center;
+  justify-between: space-between;
+}
+
+.cf-panel-body {
+  padding: 12px 14px;
+}
+
+/* Stat Metrics - Uniform Height & Padding */
+.cf-metric-box {
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 2px;
+  padding: 10px 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Codeforces Rating Colors */
+.user-gray { color: #808080 !important; font-weight: 700; }
+.user-green { color: #008000 !important; font-weight: 700; }
+.user-cyan { color: #03a89e !important; font-weight: 700; }
+.user-blue { color: #0000ff !important; font-weight: 700; }
+.user-violet { color: #aa00aa !important; font-weight: 700; }
+.user-orange { color: #ff8c00 !important; font-weight: 700; }
+.user-red { color: #ff0000 !important; font-weight: 700; }
+
+/* Verdict Color Coding */
+.verdict-accepted { color: #0f8a10; font-weight: 700; }
+.verdict-wa { color: #d9534f; font-weight: 700; }
+.verdict-tle { color: #f0ad4e; font-weight: 700; }
+.verdict-mle { color: #d9534f; font-weight: 700; }
+.verdict-rte { color: #d9534f; font-weight: 700; }
+
+/* Codeforces Flat Dense Tables */
+.cf-dense-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cf-dense-table th {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #cccccc;
+  border-top: 1px solid #cccccc;
+  padding: 7px 10px;
+  text-align: left;
+  font-weight: 700;
+  color: #333333;
+}
+
+.cf-dense-table td {
+  border-bottom: 1px solid #e1e1e1;
+  padding: 8px 10px;
+  color: #222222;
+}
+
+.cf-dense-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.cf-dense-table tr:hover {
+  background-color: #f0f4f8;
+}
+
+/* Nav Tab Pill */
+.cf-tab-item {
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #222222;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.cf-tab-item:hover {
+  color: #3b5998;
+  text-decoration: none;
+}
+
+.cf-tab-item-active {
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #3b5998;
+  border-bottom: 3px solid #3b5998;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-block;
+}

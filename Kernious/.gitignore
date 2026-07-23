@@ -1,0 +1,40 @@
+# Environment & API keys
+.env
+*.env
+backend/.env
+
+# Local Databases
+*.db
+*.sqlite
+*.sqlite3
+kernious.db
+
+# Dependencies & Build artifacts
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+
+# Python Cache & Virtual Environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+Kernious_Project_Report.pdf
+
+# Test and Verification scripts
+backend/verify_*.py
+backend/inspect_*.py
+backend/backfill_*.py
+backend/test_*.py
+backend/scratch/

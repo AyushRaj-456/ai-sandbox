@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedBlackRoots Log Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1115;
+            --surface: #1e2128;
+            --border: #2d313a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.5);
+            --success: #10b981;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #64748b;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 100px 20px 40px 20px; /* Offset for fixed nav */
+        }
+        
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: rgba(15, 17, 21, 0.85); /* Matches background slightly darker */
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            box-sizing: border-box;
+        }
+        .nav-logo {
+            font-weight: 700;
+            font-size: 20px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 1px;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-size: 18px;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        /* Demo Buttons */
+        .demo-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .demo-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: auto;
+        }
+        .demo-btn:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        textarea, input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Inter', monospace;
+            font-size: 14px;
+            margin-bottom: 24px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s ease;
+            line-height: 1.5;
+        }
+        textarea:focus, input:focus {
+            border-color: var(--primary);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 180px;
+        }
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: 0 0 30px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 0 15px var(--danger-glow);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 var(--danger-glow); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .hidden {
+            display: none !important;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .badge-High { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+        .badge-Medium { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid #f59e0b; }
+        .badge-Low { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981; }
+        
+        .section-title { font-size: 20px; font-weight: 600; margin-top: 32px; margin-bottom: 16px; color: #fff;}
+        ul { padding-left: 20px; margin-bottom: 0; }
+        li { margin-bottom: 12px; color: #cbd5e1; line-height: 1.5; }
+        
+        pre {
+            background: #000;
+            padding: 24px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #a78bfa;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Modal Overlay for alerts */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal h3 { margin-top:0; color:#fff;}
+        
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 120px 12px 20px 12px;
+            }
+            nav {
+                padding: 16px;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            .nav-links a {
+                margin: 0 8px;
+                font-size: 13px;
+            }
+            .header h1 {
+                font-size: 26px;
+            }
+            .header p {
+                font-size: 14px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .demo-bar {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .demo-bar span {
+                justify-content: center;
+                margin-bottom: 4px;
+            }
+            .demo-btn {
+                width: 100%;
+                padding: 12px;
+            }
+            .modal {
+                padding: 20px;
+                width: 90vw;
+                max-height: 80vh;
+            }
+            .modal-overlay {
+                padding: 10px;
+            }
+            /* Target flexible inline setups like the header actions to stack them */
+            .card > div[style*="display:flex"] {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 12px;
+            }
+            pre {
+                padding: 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ef4444"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+        <span style="color:#ef4444">Red</span><span style="color:#94a3b8">Black</span><span style="color:#10b981">Roots</span>
+    </a>
+    <div class="nav-links">
+        <a href="#" onclick="showAbout()">About <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span></a>
+        <a href="#" onclick="alert('Feedback tracking coming soon!')">Feedback</a>
+    </div>
+</nav>
+
+<div id="aboutModal" class="modal-overlay hidden">
+    <div class="modal" style="max-width: 650px; text-align: left; max-height: 85vh; overflow-y: auto;">
+        <h3 style="font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Why This Exists</h3>
+        <p style="color:var(--text-muted); font-size:14.5px; line-height:1.6; margin-bottom: 16px;">
+            When production systems fail, engineers don’t get clear answers—they get logs.<br><br>
+            Thousands of lines, mixed signals, and hidden errors make it difficult to identify what actually went wrong. During critical incidents such as payment failures or server crashes, developers are forced to search through large volumes of noisy data just to find a single root cause.<br><br>
+            This process is slow, stressful, error-prone, and costly in terms of downtime.
+        </p>
+
+        <h3 style="font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">The Real Problem</h3>
+        <p style="color:var(--text-muted); font-size:14.5px; line-height:1.6; margin-bottom: 16px;">
+            The challenge is not a lack of data—it is an excess of unstructured data.<br><br>
+            Logs are:
+        </p>
+        <ul style="color:var(--text-muted); font-size:14.5px; margin-bottom: 16px; padding-left: 20px;">
+            <li>Noisy, filled with irrelevant information</li>
+            <li>Disconnected, with errors appearing without clear relationships</li>
+            <li>Difficult to interpret, especially under time pressure</li>
+        </ul>
+        <p style="color:#60a5fa; font-size:14.5px; font-weight: 500; margin-bottom: 24px;">
+            Engineers do not need more logs. They need clarity, prioritization, and actionable insight.
+        </p>
+
+        <h3 style="font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">What <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span> Does</h3>
+        <p style="color:var(--text-muted); font-size:14.5px; line-height:1.6; margin-bottom: 16px;">
+            <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span> transforms raw logs into clear, structured decisions. Instead of manual analysis, it:
+        </p>
+        <ul style="color:var(--text-muted); font-size:14.5px; margin-bottom: 24px; padding-left: 20px;">
+            <li>Identifies the true root cause</li>
+            <li>Filters out irrelevant noise</li>
+            <li>Prioritizes critical issues</li>
+            <li>Explains what went wrong</li>
+            <li>Generates precise steps to resolve the problem</li>
+        </ul>
+
+        <h3 style="font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Built for Real Engineering Workflows</h3>
+        <p style="color:var(--text-muted); font-size:14.5px; line-height:1.6; margin-bottom: 16px;">
+            <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span> is designed not just to analyze, but to support real operational workflows. It:
+        </p>
+        <ul style="color:var(--text-muted); font-size:14.5px; margin-bottom: 16px; padding-left: 20px;">
+            <li>Proposes executable remediation scripts</li>
+            <li>Provides transparent reasoning for each decision</li>
+            <li>Requires user approval before any action is taken</li>
+        </ul>
+        <p style="color:#10b981; font-size:14.5px; font-weight: 500; margin-bottom: 24px;">
+            This ensures both speed and control in high-stakes environments.
+        </p>
+
+        <h3 style="font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Impact</h3>
+        <p style="color:var(--text-muted); font-size:14.5px; line-height:1.6; margin-bottom: 16px;">
+            With <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span>:
+        </p>
+        <ul style="color:var(--text-muted); font-size:14.5px; margin-bottom: 24px; padding-left: 20px;">
+            <li>Debugging time is significantly reduced</li>
+            <li>Incident resolution becomes faster and more reliable</li>
+            <li>System downtime is minimized</li>
+            <li>Engineers can focus on solving problems rather than searching for them</li>
+        </ul>
+
+        <div style="background:rgba(59,130,246,0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 24px;">
+            <p style="margin:0; font-size:15px; color:#e2e8f0; font-weight: 500;">
+                <span style="font-weight:600;"><span style="color:#ef4444">R</span><span style="color:#94a3b8">B</span><span style="color:#10b981">R</span></span> converts complex, unstructured logs into clear, actionable decisions—enabling faster and more reliable incident response.
+            </p>
+        </div>
+        
+        <button class="main-btn btn-primary" onclick="document.getElementById('aboutModal').classList.add('hidden')">Close</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h1><span style="color:#ef4444">Red</span><span style="color:#94a3b8">Black</span><span style="color:#10b981">Roots</span> LOG AGENT</h1>
+        <p style="font-size: 14.5px; max-width: 600px; margin: 8px auto 0 auto;">Agentic endpoints to parse logs, propose fixes, and handle Human-In-The-Loop explicit approval execution.</p>
+    </div>
+
+    <!-- Input Card -->
+    <div class="card" id="input-card">
+        
+        <div style="display:flex; justify-content: space-between; align-items:flex-end; margin-bottom:12px;">
+            <label style="margin:0;">System Logs</label>
+            <label for="fileUpload" style="margin:0; cursor:pointer; color:#a78bfa; font-size:12px; font-weight:600; background:rgba(167,139,250,0.1); padding:4px 10px; border-radius:6px; border:1px solid rgba(167,139,250,0.3); transition:all 0.2s;">📂 Upload .log File</label>
+            <input type="file" id="fileUpload" accept=".txt,.log" class="hidden" />
+        </div>
+        
+        <div class="demo-bar">
+            <span style="font-size: 13px; color: var(--text-muted); display:flex; align-items:center; font-weight:600;">DEMO SCENARIOS:</span>
+            <button class="demo-btn" onclick="loadDemo('oom')">💥 Server Crash (OOM)</button>
+            <button class="demo-btn" onclick="loadDemo('auth')">🔑 Database Auth Block</button>
+            <button class="demo-btn" onclick="loadDemo('spam')">🧹 Clean Noise</button>
+        </div>
+        
+        <textarea id="logsVal" placeholder="Paste your raw server logs here..."></textarea>
+        
+        <label>Directive (Optional Goal)</label>
+        <input id="goalVal" type="text" placeholder="e.g. Find the root cause and provide a bash script to restart the worker." />
+        
+        <button class="main-btn btn-primary" id="analyzeBtn">Analyze Logs</button>
+    </div>
+
+    <!-- Results Dashboard Card -->
+    <div class="card hidden" id="results-card">
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 16px;">
+            <span id="riskBadge" class="status-badge"></span>
+        </div>
+        
+        <h2 style="margin-top:0; color: #fff; font-size:28px;">Diagnosis Report</h2>
+        
+        <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-left: 4px solid #3b82f6; border-radius: 4px; margin-top: 20px;">
+            <p style="font-size: 16px; line-height:1.6; margin:0;"><strong style="color:#60a5fa;">Root Cause:</strong> <br/><span id="rootCauseText" style="color:#e2e8f0;"></span></p>
+        </div>
+        
+        <p style="font-size: 15px; line-height:1.6; margin-top:20px; color:#cbd5e1;"><strong style="color:#a78bfa;">Summary Overview:</strong> <span id="summaryText"></span></p>
+        
+        <div class="section-title">Agent Chain of Thought</div>
+        <ul id="planList" style="background:rgba(0,0,0,0.2); padding: 20px 20px 20px 40px; border-radius:8px;"></ul>
+
+        <div class="section-title">Critical System Issues</div>
+        <div id="issuesBox"></div>
+        
+        <!-- The Approval Gate -->
+        <div id="approvalGate" class="hidden" style="margin-top: 40px; border-top: 1px solid var(--border); padding-top:30px;">
+            <div style="background:#1e2128; border: 1px solid #ef4444; border-radius: 8px; padding: 24px; text-align:center;">
+                <h3 style="color:#fca5a5; margin-top:0;">🛡️ HUMAN IN THE LOOP GATE</h3>
+                <p style="color: var(--text-muted); margin-bottom: 16px; font-size:15px;">The automated repair script requires explicit operator authorization before execution is allowed on backend systems. Please review the proposed infrastructure changes below:</p>
+                <pre id="proposedScriptBox" style="text-align:left; background:#000; padding:16px; border-radius:8px; border:1px solid #ef4444; margin-bottom:24px; color:#10b981; white-space:pre-wrap; word-wrap:break-word;"></pre>
+                <button class="main-btn btn-danger" id="approveBtn">AUTHORIZE EXECUTION</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Console Simulation Card -->
+    <div class="card hidden" id="console-card">
+        <h2 style="margin-top:0; color:#10b981; font-size:20px; display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            Remote Terminal Execution
+        </h2>
+        <pre id="consoleOut"></pre>
+    </div>
+
+</div>
+
+<script>
+    let currentExecId = null;
+
+    function showAbout() {
+        document.getElementById('aboutModal').classList.remove('hidden');
+    }
+
+    const demoData = {
+        oom: {
+            logs: "2026-04-03 10:21:40 INFO Starting MainApp_Worker_1\n2026-04-03 10:21:50 ERROR Processing queued transactions... Memory usage spiked to 99%\n2026-04-03 10:22:00 ERROR OutOfMemory error (OOM) killed process MainApp_Worker_1\n2026-04-03 10:22:08 ERROR DB connection checkout failed error=timeout connecting to db_cluster_payment_01",
+            goal: "Write a strict bash script to forcefully purge the process and clear systemic caching memory."
+        },
+        auth: {
+            logs: "2026-04-03 14:10:00 INFO Initializing stripe_payment_gateway\n2026-04-03 14:10:02 WARN Token expiration warning pre-flight\n2026-04-03 14:10:05 ERROR Database connection failed: 401 Unauthorized [Invalid Credentials]\n2026-04-03 14:10:06 ERROR Transaction aborted.",
+            goal: "Identify the credential issue, and provide the command line script to update the .env variables and restart the backend."
+        },
+        spam: {
+            logs: `2026-04-04 00:01:00 INFO [System] Heartbeat OK
+2026-04-04 00:01:02 INFO [Auth] User UUID-1294 login success
+2026-04-04 00:01:05 INFO [Payment] Pre-auth gateway initialized
+2026-04-04 00:01:06 INFO [DB] Connection pool 1 returned to idle
+2026-04-04 00:01:10 INFO [Auth] User UUID-8811 login success
+2026-04-04 00:01:12 INFO [System] Heartbeat OK
+2026-04-04 00:01:15 INFO [Auth] User UUID-1999 logout success
+2026-04-04 00:01:16 INFO [Payment] Transaction req TS-001 started
+2026-04-04 00:01:17 INFO [Payment] Transaction req TS-002 started
+2026-04-04 00:01:18 INFO [System] Garbage collection minor sweep
+2026-04-04 00:01:20 INFO [Auth] User UUID-2210 login success
+2026-04-04 00:01:21 INFO [Auth] User UUID-8711 login success
+2026-04-04 00:01:22 INFO [System] Heartbeat OK
+2026-04-04 00:01:25 INFO [Payment] Pre-auth gateway initialized
+2026-04-04 00:01:26 INFO [System] Worker process W1 idling
+2026-04-04 00:01:27 WARN [DB] Connection pool 2 approaching max limit (85%)
+2026-04-04 00:01:30 INFO [Auth] User UUID-1111 login success
+2026-04-04 00:01:31 INFO [Auth] User UUID-9990 login success
+2026-04-04 00:01:32 INFO [System] Heartbeat OK
+2026-04-04 00:01:35 INFO [Payment] Transaction req TS-003 started
+2026-04-04 00:01:36 INFO [System] Worker process W2 acquired task
+2026-04-04 00:01:38 ERROR [Payment] CRITICAL: Payment service endpoint unreachable. Upstream returned 503 Service Unavailable.
+2026-04-04 00:01:39 INFO [System] Worker W2 task aborted.
+2026-04-04 00:01:40 INFO [Auth] User UUID-2331 login success
+2026-04-04 00:01:41 INFO [Auth] User UUID-4421 login success
+2026-04-04 00:01:42 INFO [System] Heartbeat OK
+2026-04-04 00:01:45 INFO [DB] Connection pool 1 returned to idle
+2026-04-04 00:01:50 INFO [Auth] User UUID-8822 login success`,
+            goal: "Filter the massive amount of noise and ignore user logins. Find the failure and script a fix."
+        }
+    };
+
+    function loadDemo(type) {
+        document.getElementById('logsVal').value = demoData[type].logs;
+        document.getElementById('goalVal').value = demoData[type].goal;
+        
+        // Add a tiny animation to show it loaded
+        const txt = document.getElementById('logsVal');
+        txt.style.borderColor = '#10b981';
+        setTimeout(() => txt.style.borderColor = 'var(--border)', 500);
+    }
+
+    document.getElementById('fileUpload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('logsVal').value = event.target.result;
+            const txt = document.getElementById('logsVal');
+            txt.style.borderColor = '#a78bfa';
+            setTimeout(() => txt.style.borderColor = 'var(--border)', 500);
+        };
+        reader.readAsText(file);
+    });
+
+    document.getElementById('analyzeBtn').addEventListener('click', async () => {
+        const logs = document.getElementById('logsVal').value;
+        const goal = document.getElementById('goalVal').value;
+        const btn = document.getElementById('analyzeBtn');
+
+        if(!logs) return alert("Please enter some logs!");
+
+        // Loading state
+        btn.innerHTML = '<div class="loader"></div>';
+        btn.disabled = true;
+        document.getElementById('results-card').classList.add('hidden');
+        document.getElementById('console-card').classList.add('hidden');
+
+        try {
+            const res = await fetch('/analyze', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({logs, goal: goal || null})
+            });
+            const data = await res.json();
+            
+            // Populate Results
+            document.getElementById('summaryText').innerText = data.summary;
+            document.getElementById('rootCauseText').innerText = data.root_cause;
+            
+            // Badge
+            const badge = document.getElementById('riskBadge');
+            badge.className = `status-badge badge-${data.risk_level}`;
+            badge.innerText = `Risk Level: ${data.risk_level || 'Low'}`;
+            
+            // Plan
+            const planList = document.getElementById('planList');
+            planList.innerHTML = '';
+            (data.plan || []).forEach(p => {
+                const li = document.createElement('li');
+                li.innerText = p;
+                planList.appendChild(li);
+            });
+            
+            // Issues
+            const issuesBox = document.getElementById('issuesBox');
+            issuesBox.innerHTML = '';
+            (data.issues || []).forEach(i => {
+                const listHtml = (i.actions || []).map(a => `<li>${a}</li>`).join('');
+                issuesBox.innerHTML += `
+                    <div style="background: rgba(0,0,0,0.3); padding: 20px; margin-top: 16px; border-radius: 8px; border-left: 4px solid #60a5fa;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                            <strong style="color:#60a5fa; font-size:18px;">${i.title}</strong>
+                            <span style="background:rgba(255,255,255,0.08); color:#e2e8f0; padding: 4px 8px; border-radius:4px; font-size:12px; font-weight:600; text-transform:uppercase;">${i.severity}</span>
+                        </div>
+                        <p style="font-size:15px; margin: 12px 0;">${i.reason}</p>
+                        <strong style="color:#a78bfa; font-size:14px; margin-top:16px; display:block;">Suggested Actions:</strong>
+                        <ul style="margin-top:8px; font-size:14px;">${listHtml}</ul>
+                    </div>
+                `;
+            });
+
+            // Approval Gate
+            if(data.approval_required && data.execution_id) {
+                currentExecId = data.execution_id;
+                document.getElementById('approvalGate').classList.remove('hidden');
+                
+                // Render the proposed bash script
+                document.getElementById('proposedScriptBox').innerText = data.auto_fix_script || "# No explicit bash commands provided.";
+                
+                // Reset approval button
+                const appBtn = document.getElementById('approveBtn');
+                appBtn.innerHTML = 'AUTHORIZE EXECUTION';
+                appBtn.disabled = false;
+                appBtn.className = 'main-btn btn-danger';
+            } else {
+                document.getElementById('approvalGate').classList.add('hidden');
+            }
+
+            document.getElementById('results-card').classList.remove('hidden');
+            
+            // Scroll to results
+            document.getElementById('results-card').scrollIntoView({ behavior: 'smooth' });
+
+        } catch(e) {
+            alert("Error: " + e.message);
+        } finally {
+            btn.innerHTML = 'Analyze Logs';
+            btn.disabled = false;
+        }
+    });
+
+    document.getElementById('approveBtn').addEventListener('click', async () => {
+        if(!currentExecId) return;
+        const btn = document.getElementById('approveBtn');
+        btn.innerHTML = '<div class="loader"></div>';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('/approve', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({execution_id: currentExecId, approved: true})
+            });
+            const data = await res.json();
+            
+            document.getElementById('console-card').classList.remove('hidden');
+            const pre = document.getElementById('consoleOut');
+            pre.innerHTML = '';
+            
+            document.getElementById('console-card').scrollIntoView({ behavior: 'smooth' });
+            
+            // Simulated typewriter effect for terminal
+            let i = 0;
+            function typeLog() {
+                if(i < data.execution_log.length) {
+                    pre.innerHTML += data.execution_log[i] + '\n';
+                    i++;
+                    setTimeout(typeLog, window.innerWidth > 600 ? 120 : 50); // Faster on smaller screens, dynamic feel
+                } else {
+                    btn.innerHTML = 'SUCCESSFULLY EXECUTED';
+                    btn.className = 'main-btn btn-success';
+                }
+            }
+            typeLog();
+
+        } catch(e) {
+            alert("Error: " + e.message);
+            btn.innerHTML = 'AUTHORIZE EXECUTION';
+            btn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>

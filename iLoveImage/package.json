@@ -1,0 +1,14 @@
+{
+  "name": "iloveimage-root",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "server": "node local-server.js",
+    "build": "npm --prefix frontend install && npm --prefix frontend run build"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.8",
+    "jszip": "^3.10.1"
+  }
+}

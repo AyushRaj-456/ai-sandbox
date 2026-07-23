@@ -1,0 +1,575 @@
+.sidebar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--panel-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  position: relative;
+  transition: border-color 0.2s ease;
+}
+
+.sidebar.dragOver {
+  border-right: 2px dashed #38bdf8;
+  background-color: rgba(56, 189, 248, 0.02);
+}
+
+.explorerSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+/* Toolbar Styling */
+.toolbar {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbarActions {
+  display: flex;
+  gap: 4px;
+}
+
+.iconBtn {
+  color: #94a3b8;
+  padding: 4px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.iconBtn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* Search Bar Filtering */
+.searchContainer {
+  margin: 8px 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px 6px 28px;
+  font-size: 0.8rem;
+  color: #fff;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+}
+
+/* Recursive Directory Tree */
+.fileTree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.treeLevel {
+  display: flex;
+  flex-direction: column;
+}
+
+.treeNodeWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.treeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  transition: background 0.15s ease, color 0.15s ease;
+  border-left: 2px solid transparent;
+}
+
+.treeRow:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: #fff;
+}
+
+.treeRow.active {
+  background-color: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  border-left-color: #38bdf8;
+}
+
+.nodeLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.arrowIcon {
+  display: flex;
+  align-items: center;
+  color: #64748b;
+  width: 14px;
+}
+
+.indentPlaceholder {
+  width: 14px;
+}
+
+.folderIcon {
+  color: #eab308; /* yellow folder */
+  flex-shrink: 0;
+}
+
+.fileIcon {
+  color: #38bdf8; /* sky blue standard file */
+  flex-shrink: 0;
+}
+
+.themeIcon {
+  color: #ec4899; /* pink style palette */
+  flex-shrink: 0;
+}
+
+.diagramIcon {
+  color: #10b981; /* emerald diagram flow */
+  flex-shrink: 0;
+}
+
+.nodeName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nodeRight {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.treeRow:hover .nodeRight {
+  opacity: 1;
+}
+
+.inlineBtn {
+  color: #64748b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  transition: all 0.1s ease;
+}
+
+.inlineBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.folderContent {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Creation Forms */
+.createForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+}
+
+.createInput, .renameInput {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #38bdf8;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  width: 80%;
+  outline: none;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+/* File Outline Section */
+.outlineSection {
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.outlineSection.collapsed {
+  height: auto;
+}
+
+.outlineHeader {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.outlineHeader:hover .title {
+  color: #fff;
+}
+
+.badge {
+  font-size: 0.65rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.outlineList {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.outlineRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.outlineRow:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: #38bdf8;
+}
+
+.outlineName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outlineLine {
+  font-size: 0.7rem;
+  color: #475569;
+}
+
+.slideType {
+  color: #38bdf8;
+}
+
+.themeType {
+  color: #ec4899;
+}
+
+.compType {
+  color: #10b981;
+}
+
+.noOutline {
+  padding: 12px;
+  font-size: 0.75rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Visual Drag & Drop Upload Overlay */
+.uploadOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px dashed #38bdf8;
+  margin: 4px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.uploadIcon {
+  color: #38bdf8;
+  animation: pulse 1.5s infinite;
+}
+
+.uploadText {
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Premium Context Menu */
+.contextMenu {
+  position: fixed;
+  background-color: #181a1f;
+  border: 1px solid #2d3139;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1000;
+  min-width: 140px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  color: #abb2bf;
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.1s ease;
+  width: 100%;
+}
+
+.menuItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.menuDanger {
+  color: #f87171;
+}
+
+.menuDanger:hover {
+  background-color: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+}
+
+.menuDivider {
+  height: 1px;
+  background-color: #2d3139;
+  margin: 4px 0;
+}
+
+/* Slide Deck Overview tab styles */
+.tabSwitcher {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.tabBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.tabBtn:hover {
+  color: #fff;
+}
+
+.tabBtn.activeTab {
+  color: #38bdf8;
+  border-bottom-color: #38bdf8;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.slidesTabSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.slideThumbnailList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slideThumbnailCard {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.slideThumbnailCard:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slideThumbnailCard.hiddenCard {
+  opacity: 0.4;
+}
+
+.thumbnailCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slideIndex {
+  background: #38bdf8;
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideTitleText {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f8fafc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.slideMiniCanvas {
+  height: 80px;
+  background: #0f172a;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.canvasText {
+  font-size: 0.65rem;
+  color: #64748b;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.thumbnailCardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.cardActionBtn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardActionBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: #64748b;
+}
+
+.cardActionBtn.dangerBtn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: #ef4444;
+}
+
+.noSlides {
+  padding: 24px;
+  font-size: 0.75rem;
+  color: #64748b;
+  text-align: center;
+}

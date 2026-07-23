@@ -1,0 +1,7 @@
+2026-04-03 10:21:40 INFO Application started successfully
+2026-04-03 10:21:45 INFO User login success user="test_user@example.com"
+2026-04-03 10:21:50 INFO Starting database query...
+2026-04-03 10:22:00 ERROR DB connection failed error=timeout while connecting to 10.0.0.5:5432
+2026-04-03 10:22:01 WARN Retry attempt 1
+2026-04-03 10:22:05 ERROR Database connection failed status=dead
+2026-04-03 10:22:15 ERROR Timeout occurred

@@ -1,0 +1,321 @@
+.bar {
+  height: 48px;
+  background-color: var(--panel-bg, #111827);
+  border-bottom: 1px solid var(--border-color, #1f2937);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  user-select: none;
+  font-family: inherit;
+  flex-shrink: 0;
+  z-index: 100;
+  position: relative;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoIcon {
+  color: #38bdf8;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+}
+
+.logoText {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #f8fafc;
+}
+
+.logoBadge {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.menusList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.menuContainer {
+  position: relative;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menuButton:hover,
+.menuButton.active {
+  color: #f8fafc;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  min-width: 240px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 200;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #38bdf8;
+  color: #ffffff;
+}
+
+.shortcut {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.dropdownItem:hover .shortcut {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color, #1f2937);
+  margin: 0 4px;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.iconBtn:hover {
+  color: #f8fafc;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.actionBtn {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color, #1f2937);
+  color: #94a3b8;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+.actionBtn.collapsed {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.compileBtn {
+  background-color: #38bdf8;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s ease;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+}
+
+.compileBtn:hover:not(:disabled) {
+  background-color: #0284c7;
+}
+
+.compileBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aboutLink {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.aboutLink:hover {
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.45);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(236, 72, 153, 0.95), 0 0 6px rgba(236, 72, 153, 0.45);
+    transform: scale(1.03);
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.45);
+    transform: scale(1);
+  }
+}
+
+.publishPulsing {
+  animation: pulseGlow 2s infinite ease-in-out;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(236, 72, 153, 0.45);
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 1000;
+  animation: fadeInDown 0.3s ease;
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  right: 32px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent rgba(15, 23, 42, 0.98) transparent;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium TopMenuBar mobile responsive adjustments */
+@media (max-width: 768px) {
+  .logoText {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+  }
+  
+  .logoBadge {
+    display: none !important;
+  }
+  
+  .right {
+    display: none !important; /* Hide individual compile, download, and palette buttons on mobile */
+  }
+  
+  .menusList {
+    gap: 2px !important;
+  }
+  
+  .menuButton {
+    padding: 6px 8px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .dropdown {
+    min-width: 180px !important;
+  }
+
+  .left {
+    gap: 8px !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+}
+

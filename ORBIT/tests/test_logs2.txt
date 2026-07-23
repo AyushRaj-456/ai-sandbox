@@ -1,0 +1,6 @@
+2026-04-03 10:21:45 INFO User checkout started session=1234
+2026-04-03 10:21:58 INFO Validating Stripe payment...
+2026-04-03 10:22:01 ERROR API request failed status=401 url=/v1/charges
+2026-04-03 10:22:01 ERROR Payment failed error=Invalid API key
+2026-04-03 10:22:02 ERROR Unauthorized access key_used=sk_live_testabcd
+2026-04-03 10:22:02 WARN Sending alert email to admins

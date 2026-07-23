@@ -1,0 +1,85 @@
+.terminal {
+  height: 200px;
+  background-color: #0d0f12;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.clearBtn {
+  color: #64748b;
+  border-radius: 4px;
+}
+
+.clearBtn:hover {
+  color: #fff;
+}
+
+.content {
+  flex: 1;
+  padding: 12px 16px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.empty {
+  color: #475569;
+  font-style: italic;
+}
+
+.logLine {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.timestamp {
+  color: #64748b;
+  user-select: none;
+}
+
+.info .message {
+  color: #9cdcfe;
+}
+
+.success .message {
+  color: #4ade80;
+}
+
+.warning .message {
+  color: #facc15;
+}
+
+.error .message {
+  color: #f87171;
+}
+
+.clickableLog {
+  cursor: pointer;
+}
+
+.clickableLog:hover .message {
+  text-decoration: underline;
+  opacity: 0.95;
+}
